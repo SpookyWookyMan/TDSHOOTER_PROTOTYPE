@@ -1,19 +1,30 @@
 #include "environment.h"
 
+EnvLoader TileMgr::envL;
 std::vector<Tile> TileMgr::tiles;
 
 void TileMgr::start(void) 
 {
 	//test
-	Tile testTile = Tile(sf::Vector2f(400, 400), 100, TileType::COLLISION, sf::Color::Black);
+	//Tile testTile = Tile(sf::Vector2f(400, 400), 100, TileType::COLLISION, sf::Color::Black);
+	envL.generateTiles({ 0,0 }, 50, 26, 18);
 
-	tiles.push_back(testTile);
+	//tiles.push_back(testTile);
 }
-void TileMgr::draw(sf::RenderWindow*& window) 
+void TileMgr::drawDecor(sf::RenderWindow*& window)
+{
+	for (auto& i : tiles)
+	{
+		if(i.type == TileType::DECOR)
+			i.draw(window);
+	}
+}
+void TileMgr::drawCol(sf::RenderWindow*& window) 
 {
 	for (auto& i : tiles) 
 	{
-		i.draw(window);
+		if (i.type == TileType::COLLISION)
+			i.draw(window);
 	}
 }
 void TileMgr::purge(void) 

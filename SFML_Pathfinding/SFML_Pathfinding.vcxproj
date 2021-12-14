@@ -146,9 +146,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="circularbound.cpp" />
+    <ClCompile Include="envloader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="npc.cpp" />
+    <ClCompile Include="npcdirector.cpp" />
     <ClCompile Include="npcmgr.cpp" />
     <ClCompile Include="panel.cpp" />
     <ClCompile Include="player.cpp" />
@@ -165,16 +168,15 @@
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="environment.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="entity.h" />
-    <ClInclude Include="inventory.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="res.h" />
     <ClInclude Include="util.h" />
-    <ClInclude Include="weapons.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

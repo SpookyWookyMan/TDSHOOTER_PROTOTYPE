@@ -39,6 +39,8 @@ private:
 
 public:
 
+	ProjectileManager* projectileManager;
+
 	enum class CollisionType { BULLET = 0, BOUND, PLAYER };
 
 	sf::RenderWindow* window = nullptr;
@@ -47,10 +49,15 @@ public:
 
 	NPCManager();
 
-	void update(const float& dt, std::vector<Projectile>& cvec, const sf::Vector2f& playerPos, sf::RenderWindow*& window);
+	void update(const float& dt, std::vector<Projectile>& cvec, const sf::Vector2f& playerPos, sf::RenderWindow*& window,
+				Bound* playerBounds);
 	void draw(sf::RenderWindow*& window);
 
-	void instantiate(const sf::Vector2f& pos, const int64_t& health);
+	void instantiate(const sf::Vector2f& pos, const int64_t& health, const int8_t& size);
+
+	bool isColliding(Projectile& proj, NPC& npc, Bound* playerBounds);
+	void onCollision(Projectile& proj, NPC& npc, Bound* playerBounds);
+
 	void projColAction(NPC& npc, const int64_t& damage);
 };
 
@@ -116,7 +123,11 @@ private:
 	sf::RectangleShape rect; //temporary
 	sf::Color color;
 
+	float shotTimer = 0.0f;
+
 public:
+
+	ProjectileManager* projectileManager;
 
 	sf::Vector2f position;
 	sf::Vector2f lsize;
@@ -138,4 +149,28 @@ public:
 	void draw(sf::RenderWindow*& window) override;
 
 	sf::RectangleShape& getRect(void) { return rect; }
+};
+
+class NPCDirector
+{
+private:
+
+	static std::vector<sf::Vector2f> smallSpawnLocations;
+	static std::vector<sf::Vector2f> mediumSpawnLocations;
+	static std::vector<sf::Vector2f> largeSpawnLocations;
+
+	static sf::Vector2f bossSpawnLoaction;
+
+public:
+
+	static NPCManager manager;
+
+	static void start(void);
+	static void update(const float& dt, std::vector<Projectile>& cvec, const sf::Vector2f& playerPos, sf::RenderWindow*& window,
+		Bound* playerBounds);
+	static void draw(sf::RenderWindow*& window);
+
+	static void addSmallSpawn(const std::vector<sf::Vector2f>& vecs);
+	static void addMediumSpawn(const std::vector<sf::Vector2f>& vecs);
+	static void addLargeSpawn(const std::vector<sf::Vector2f>& vecs);
 };

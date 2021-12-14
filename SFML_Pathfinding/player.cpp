@@ -1,5 +1,4 @@
 #include "player.h"
-#include <limits>
 
 Player::Player()
 {
@@ -7,15 +6,17 @@ Player::Player()
 
 void Player::start(void)
 {
-	rect = sf::RectangleShape({50.0f, 50.0f});
+	rect = sf::RectangleShape({PSIZE, PSIZE});
 	rect.setOrigin(rect.getSize().x / 2, rect.getSize().y / 2);
 
-	pos = sf::Vector2f( WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 );
+	pos = sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);// - 60 );
 	speed = sf::Vector2f(PSPEED_X, PSPEED_Y);
 
 	rect.setPosition(pos);
 
 	bounds = SquareBounds(pos, rect.getSize().x);
+	//const sf::Vector2f& position, const sf::Vector2f& size, const int64_t& max
+	healthBar = gui::HealthBar({ WINDOW_WIDTH/2 - WINDOW_WIDTH/4, 25 }, { WINDOW_WIDTH / 2, 30 }, 10000);
 }
 void Player::events(sf::Event& evt)
 {
@@ -45,17 +46,17 @@ void Player::shoot(sf::RenderWindow*& window)
 
 		if (isAuto) 
 		{
-			if (autoInterval >= 0.1f) //Check for specific gun's cooldown timer
+			if (autoInterval >= fireRate) //Check for specific gun's cooldown timer
 			{ 
 				float tdev = util::randnum(-300, 300) / 100; //temporary
 
-				projectileMgr->instantiate(pos, &bounds, theta + tdev, 5.0f, 2000.0f); 
+				projectileMgr->instantiate(pos, &bounds, theta + tdev, 5.0f, 1300.0f); 
 				autoInterval = 0;
 			}
 		}
 		else if(!hasShot)
 		{
-			projectileMgr->instantiate(pos, &bounds, theta, 5.0f, 2000.0f);
+			projectileMgr->instantiate(pos, &bounds, theta, 5.0f, 1300.0f);
 
 			hasShot = true;
 		}
@@ -73,7 +74,8 @@ void Player::collision(void)
 {
 	for (auto& i : TileMgr::tiles)
 	{
-		if (i.getBounds().intersects(bounds)) 
+		if (i.getBounds().intersects(bounds)
+			&& i.type == TileType::COLLISION) 
 		{
 			sf::Vector2f bpos(bounds.position);
 			sf::Vector2f tpos(i.getBounds().position);
@@ -102,6 +104,17 @@ void Player::collision(void)
 			pos.y += dy;
 		}
 	}
+	for (auto& i : projectileMgr->getProjectiles()) 
+	{
+		float dist = util::pointDist(i.position, pos);
+		if (dist < i.getBounds().radius + PSIZE / 2
+			&& *i.getOwner() != bounds) 
+		{
+			//apply damage to player
+			healthBar.changeBy(-10);
+			i.delete_ = true;
+		}
+	}
 }
 
 void Player::update(sf::RenderWindow*& window, const float& dt)
@@ -118,8 +131,14 @@ void Player::update(sf::RenderWindow*& window, const float& dt)
 
 	rect.setPosition(pos);
 	bounds.setPosition(sf::Vector2f(pos.x-bounds.side / 2 , pos.y - bounds.side / 2));
+
+	healthBar.update(window, dt);
 }
 void Player::draw(sf::RenderWindow*& window)
 {
 	window->draw(rect);
+}
+void Player::drawGui(sf::RenderWindow*& window)
+{
+	healthBar.draw(window);
 }

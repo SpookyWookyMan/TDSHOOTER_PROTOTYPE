@@ -7,16 +7,18 @@
 #include <functional>
 #include <time.h>
 #include <random>
+#include <cstdarg>
+#include <stdio.h>
 
 #include "gui.h"
 #include "res.h"
 #include "collision.h"
 #include "environment.h"
 
-#define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 1400
+#define WINDOW_HEIGHT 900
 
-#define LOG(x) std::cout << x << std::endl
+#define LOG(...) {printf(__VA_ARGS__);}
 
 #define LMB 0
 #define RMB 1

@@ -29,25 +29,28 @@ void Projectile::update(const float& dt)
 
 	for (auto& i : TileMgr::tiles) 
 	{
-		bool up = i.getBounds().intersects(pointUp);
-		bool left = i.getBounds().intersects(pointLeft);
-		bool down = i.getBounds().intersects(pointDown);
-		bool right = i.getBounds().intersects(pointRight);
+		if (i.type == TileType::COLLISION) 
+		{
+			bool up = i.getBounds().intersects(pointUp);
+			bool left = i.getBounds().intersects(pointLeft);
+			bool down = i.getBounds().intersects(pointDown);
+			bool right = i.getBounds().intersects(pointRight);
 
-		if (up || down) 
-		{ 
-			if (anglY > 65.0f) direction.y *= -1;
-			else delete_ = true;
-		}
-		else if (left || right) 
-		{ 
-			if (anglY < 35.0f) direction.x *= -1;
-			else delete_ = true;
+			if (up || down)
+			{
+				if (anglY > 75.0f) direction.y *= -1;
+				else delete_ = true;
+			}
+			else if (left || right)
+			{
+				if (anglY < 25.0f) direction.x *= -1;
+				else delete_ = true;
+			}
 		}
 	}
 
 	float lifeTime = (!delete_) ? destroyClock.getElapsedTime().asSeconds() : 0.0f;
-	if (lifeTime > 1.0f) 
+	if (lifeTime > 5.0f) 
 	{
 		delete_ = true;
 		lifeTime = 0;

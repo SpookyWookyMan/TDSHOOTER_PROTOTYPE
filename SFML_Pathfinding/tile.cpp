@@ -1,6 +1,9 @@
 #include "environment.h"
 
-Tile::Tile(const sf::Vector2f& position, const int16_t& length, const TileType& type, const sf::Color& color) 
+Tile::Tile()
+{
+}
+Tile::Tile(const sf::Vector2f& position, const int16_t& length, const TileType& type, const sf::Color& color)
 	: length(length), type(type)
 {
 	rect.setPosition(position);

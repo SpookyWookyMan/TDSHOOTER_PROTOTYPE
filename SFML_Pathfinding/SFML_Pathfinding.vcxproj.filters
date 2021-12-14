@@ -87,6 +87,15 @@
     <ClCompile Include="tilemgr.cpp">
       <Filter>Source Files\environment</Filter>
     </ClCompile>
+    <ClCompile Include="envloader.cpp">
+      <Filter>Source Files\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="npcdirector.cpp">
+      <Filter>Source Files\entities\npcs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="program.h">
@@ -113,10 +122,7 @@
     <ClInclude Include="environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="weapons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inventory.h">
+    <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

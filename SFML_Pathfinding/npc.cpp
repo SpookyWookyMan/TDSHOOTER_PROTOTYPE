@@ -27,12 +27,17 @@ NPC::NPC(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Color
 
 void NPC::update(const float& dt, const sf::Vector2f& playerPos, sf::RenderWindow*& window)
 {
-	//if player is in view and is chasing player
-	if (detectedPlayer) 
-	{
-		float theta = util::lookAt(rect.getPosition(), playerPos);
-		rect.setRotation(theta);
+	shotTimer += dt;
+
+
+	float theta = util::lookAt(rect.getPosition(), playerPos);
+	rect.setRotation(theta);
+
+	if (shotTimer >= 0.8f) {
+		projectileManager->instantiate(position, &bounds, theta, 5.0f, 300.0f);
+		shotTimer = 0.0f;
 	}
+
 
 	healthBar.setPosition(sf::Vector2f(this->position.x - lsize.x / 2, this->position.y - (lsize.y - lsize.y * 0.2f)));
 	healthBar.update(window, dt);

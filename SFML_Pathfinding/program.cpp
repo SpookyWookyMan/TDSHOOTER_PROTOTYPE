@@ -26,6 +26,8 @@ void Program::open(void)
 
     srand(time(NULL));
 
+    LOG("Testing ", "this");
+
     //initiate resources here
     res_mgr::addFont("res/fonts/arial.ttf", "Arial");
     res_mgr::addFont("res/fonts/m12.ttf", "M12");
@@ -38,10 +40,33 @@ void Program::open(void)
 
     player.start();
     player.projectileMgr = &projectileMgr;
+    npcmgr.projectileManager = &projectileMgr;
 
-    npcmgr.instantiate(sf::Vector2f(600.0f, 200.0f), 100000);
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH * 0.07f, WINDOW_HEIGHT * 0.11f), 300, 50);                  //TEST: Small spawns
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH - WINDOW_WIDTH * 0.07f, WINDOW_HEIGHT * 0.11f), 300, 50);   //TEST: Small spawns   
+    //                                                                                                         
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH * 0.07f, WINDOW_HEIGHT / 2.0f), 300, 50);                   //TEST: Small spawns
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH - WINDOW_WIDTH * 0.07f, WINDOW_HEIGHT / 2.0f), 300, 50);    //TEST: Small spawns
+    //                                                                                                         
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH * 0.07f, WINDOW_HEIGHT / 4.0f), 300, 50);                   //TEST: Small spawns
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH - WINDOW_WIDTH * 0.07f, WINDOW_HEIGHT / 4.0f), 300, 50);    //TEST: Small spawns
+    //                                                                                                         
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 4.0f), 300, 50);                    //TEST: Small spawns
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH - WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 4.0f), 300, 50);     //TEST: Small spawns
+    //
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH / 2 - WINDOW_WIDTH * 0.14f, WINDOW_HEIGHT / 4.0f + WINDOW_HEIGHT * 0.11f), 600, 75);
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH - (WINDOW_WIDTH / 2 - WINDOW_WIDTH * 0.14f), WINDOW_HEIGHT / 4.0f + WINDOW_HEIGHT * 0.11f), 600, 75);
+    //
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH / 2 - WINDOW_WIDTH * 0.28f, WINDOW_HEIGHT / 4.0f + WINDOW_HEIGHT * 0.27f), 600, 75);
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH - (WINDOW_WIDTH / 2 - WINDOW_WIDTH * 0.28f), WINDOW_HEIGHT / 4.0f + WINDOW_HEIGHT * 0.27f), 600, 75);
+    //
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH / 2 - WINDOW_WIDTH * 0.11f, WINDOW_HEIGHT / 4.0f - WINDOW_HEIGHT * 0.07f), 1200, 100);
+    //npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH / 2 + WINDOW_WIDTH * 0.11f, WINDOW_HEIGHT / 4.0f - WINDOW_HEIGHT * 0.07f), 1200, 100);
 
-    TileMgr::start();
+    npcmgr.instantiate(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4.0f - WINDOW_HEIGHT * 0.07f), 1200, 125);
+
+    //TileMgr::start();
+
     //build ui here
     //b.setText("Text");
 }
@@ -56,12 +81,18 @@ void Program::draw(void)
     window->clear(sf::Color(27, 38, 102));
     //Draw things here ==============================
     //b.draw(window);
+    
+    //TileMgr::drawDecor(window);
+
     player.draw(window);
-    projectileMgr.draw(window);
     npcmgr.draw(window);
+
+    //TileMgr::drawCol(window);
+
+    projectileMgr.draw(window);
+    player.drawGui(window);
     gui::PopUpTextMgr::draw(window);
     window->draw(inGameCursor);
-    TileMgr::draw(window);
     //===============================================
     window->display();
 }
@@ -77,7 +108,7 @@ void Program::update(void)
 
     player.update(window, deltaTime);
     projectileMgr.update(deltaTime);
-    npcmgr.update(deltaTime, projectileMgr.getProjectiles(), player.getRect().getPosition(), window);
+    npcmgr.update(deltaTime, projectileMgr.getProjectiles(), player.pos, window, &player.getBounds());
 }
 void Program::run(void) 
 {

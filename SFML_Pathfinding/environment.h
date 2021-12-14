@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 
@@ -9,20 +10,12 @@ enum class TileType;
 class Tile;
 class TileMgr;
 
-class MapGenerator 
+class EnvLoader
 {
-	//Implement this over the week
 
-	// 1. Load .png image from resources folder
-	// 2. Separate each one, 'collision' will be the most important and the sole reason why this class exists.
-	// 3. From the 'collision' image, we will get each 32x32 pixel cell from the image, and convert the cells which
-	// are not transparent into Tiles, with 32 pixel length, scaled up as needed.
-	// 4. After all is done. Separate all layes into chunks, which will then be used on the procedurally generated map.
-	// 5. Figure out - after the conversion and chunks are working - the implementation of procedural generation.
-	// 
-	// !IMPORTANT ---> This, along with the AI, are the two hardest things on the whole project, the rest should be simple
-	// 	   to implement. Make sure this is working properly and fits the vision of the game along with the AI. It doesn't matter
-	//	   how long it might take, these features must be implemented and the project must be finished. 
+public:
+
+	void generateTiles(const sf::Vector2f &pos, const int16_t& length, const int16_t& nTilesX, const int16_t& nTilesY);
 };
 
 enum class TileType
@@ -45,6 +38,7 @@ public:
 
 	TileType type;
 
+	Tile();
 	Tile(const sf::Vector2f& position, const int16_t& length, const TileType& type, const sf::Color& color);
 
 	void draw(sf::RenderWindow*& window);
@@ -54,11 +48,16 @@ public:
 
 class TileMgr 
 {
+private:
+
+	static EnvLoader envL;
+
 public:
 
 	static std::vector<Tile> tiles;
 
 	static void start(void);
-	static void draw(sf::RenderWindow*& window);
+	static void drawDecor(sf::RenderWindow*& window);
+	static void drawCol(sf::RenderWindow*& window);
 	static void purge(void);
 };

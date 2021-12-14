@@ -34,6 +34,10 @@ HealthBar::HealthBar(const sf::Vector2f& position, const sf::Vector2f& size, con
 	back.setFillColor(sf::Color(0, 0, 0, 100));
 	filr.setFillColor(sf::Color(194, 60, 8));
 	main.setFillColor(sf::Color(98, 133, 103));
+
+	back.setPosition(position);
+	filr.setPosition(position);
+	main.setPosition(position);
 }
 
 void HealthBar::update(sf::RenderWindow*& window, const float& dt) 
